@@ -5,6 +5,7 @@ from collections import defaultdict
 from pprint import pprint
 
 index = []
+dedup = []
 hier = {'name': 'index',
         'children': []} 
 
@@ -31,12 +32,21 @@ for item in index:
         hier['children'].append({'name': item[0],
                                  'children': []}) 
         hier['children'][-1]['children'].append({'name': item[1],
-                                             'children': []})
+                                                 'children': []})
         for page in pages:
-            hier['children'][-1]['children'][-1]['children'].append({'name': page, 'size': 1})
+            hier['children'][-1]\
+                ['children'][-1]\
+                ['children'].append({'name': page, 'size': 1})
     else:
-        print('passing')
-        pass 
+        for row in index:
+            if item[0] in row:
+                pages.append(row[1])
+            pages = sorted(list(set(pages)))
+        hier['children'].append({'name': item[0],
+                                 'children': []}) 
+        for page in pages:
+            hier['children'][-1]['children'].append({'name': page,
+                                                     'size': 1})
 
 pprint(hier)
 
