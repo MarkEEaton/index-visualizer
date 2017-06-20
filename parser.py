@@ -46,7 +46,7 @@ json_final = []
 for item in hier['children']:
     json_check.append(json.dumps(item))
 
-json_set = sorted(list(set(json_check)))
+json_set = sorted(list(set(json_check)), key=str.lower)
 
 for item in json_set:
    json_final.append(json.loads(item))
