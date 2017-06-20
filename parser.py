@@ -27,12 +27,13 @@ for item in index:
             if item[0] in row:
                 if item[1] in row:
                     pages.append(row[2])
-            pages = list(set(pages))
+            pages = sorted(list(set(pages)))
         hier['children'].append({'name': item[0],
                                  'children': []}) 
         hier['children'][-1]['children'].append({'name': item[1],
                                              'children': []})
-        hier['children'][-1]['children'][-1]['children'].append({'name': ', '.join(pages)})
+        for page in pages:
+            hier['children'][-1]['children'][-1]['children'].append({'name': page, 'size': 1})
     else:
         print('passing')
         pass 
