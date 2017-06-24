@@ -68,29 +68,17 @@ def amalgamate():
         names.append(item['name'])
     names = list(set(names))
     for item in hier['children']:
-        page = item['children'][0]['children']
         level1 = item['name']
         level2 = item['children'][0]['name']
-        path = copy(item)
-        path['children'][0].pop('children')
-        for name in names:
-            if item['name'] == name:
-                if name not in [x['name'] for x in new_hier['children']]:
-                    new_hier['children'].append(item)
-                else:
-                    for entry1 in [x['name'] for x in new_hier['children']]:
-                        if entry1 == level1:
-                            for entry2 in [x['name'] for x in new_hier['children'][0]['children'][0]]:
-                                if entry2 == level2:
-                                    for child in new_hier['children']:
-                                        if child['name'] == entry2:
-                                            #print(child['name'])
-                                            child['children'].append({'name': 'blah'})
-                                            #new_hier['children'][0]['children'] = page
-                        else:
-                            pass
-                    #path['children'].append(page)
+        list_of_names = [x['name'] for x in new_hier['children']] 
+        if item['name'] not in list_of_names:
+            new_hier['children'].append(item)
+            print('adding')
+        elif [x['children'].append(level2) if level1 == x['name'] else print(level1 + ' pass') for x in new_hier['children']]:
+            pass
+
     pprint(new_hier)
+
 
 if __name__ == '__main__':
     rectangulate()
