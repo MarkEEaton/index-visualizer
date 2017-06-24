@@ -1,5 +1,6 @@
 import csv
 import json
+from copy import copy
 from pprint import pprint
 
 index = []
@@ -67,16 +68,28 @@ def amalgamate():
         names.append(item['name'])
     names = list(set(names))
     for item in hier['children']:
-        page = item['children'][0]['children'][0]
+        page = item['children'][0]['children']
+        level1 = item['name']
+        level2 = item['children'][0]['name']
+        path = copy(item)
+        path['children'][0].pop('children')
         for name in names:
             if item['name'] == name:
                 if name not in [x['name'] for x in new_hier['children']]:
                     new_hier['children'].append(item)
                 else:
-                    new_hier['children'][0]\
-                            ['children'][0]\
-                            ['children'].append(page)
-                    pass
+                    for entry1 in [x['name'] for x in new_hier['children']]:
+                        if entry1 == level1:
+                            for entry2 in [x['name'] for x in new_hier['children'][0]['children'][0]]:
+                                if entry2 == level2:
+                                    for child in new_hier['children']:
+                                        if child['name'] == entry2:
+                                            #print(child['name'])
+                                            child['children'].append({'name': 'blah'})
+                                            #new_hier['children'][0]['children'] = page
+                        else:
+                            pass
+                    #path['children'].append(page)
     pprint(new_hier)
 
 if __name__ == '__main__':
