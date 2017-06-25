@@ -70,11 +70,15 @@ def amalgamate():
     for item in hier['children']:
         level1 = item['name']
         level2 = item['children'][0]['name']
+        level3 = item['children'][0]['children'][0]
         list_of_names = [x['name'] for x in new_hier['children']] 
         if item['name'] not in list_of_names:
             new_hier['children'].append(item)
             print('adding')
-        elif [x['children'].append({'name': level2, 'children': 'blah'}) if level1 == x['name'] else print(level1 + ' pass') for x in new_hier['children']]:
+        else:
+            [x['children'].append({'name': level2, 'children': [level3]})\
+             if level1 == x['name'] else print(level1 + ' pass')\
+             for x in new_hier['children']]
             pass
 
     pprint(new_hier)
