@@ -18,6 +18,7 @@ with open('miller.txt', 'r') as f1:
 
 
 def rectangulate():
+    """ make the data rectangular by adding none values """
     for row in index:
         if len(row) < 3:
             row.append(None)
@@ -26,25 +27,33 @@ def rectangulate():
 
 
 def hierarchify():
+    """ create the hierarchy """
     for item in index:
-        pages = []
+        pages3 = []
+        pages2 = []
         if item[2] != None:
-            for row in index:
-                if item[0] in row:
-                    if item[1] in row:
-                        pages.append(row[2])
-                pages = sorted(list(set(pages)))
+            for row3 in index:
+                if item[0] in row3:
+                    if item[1] in row3:
+                        pages3.append(row3[2])
+                pages3 = sorted(list(set(pages3)))
             hier['children'].append({'name': item[0],
                                      'children': []}) 
             hier['children'][-1]['children'].append({'name': item[1],
                                                      'children': []})
-            for page in pages:
+            for page in pages3:
                 hier['children'][-1]\
                     ['children'][-1]\
                     ['children'].append({'name': page, 'size': 1})
     
         else:
-            pass
+            for row2 in index:
+                if item[0] in row2:
+                    pages2.append(row2[1])
+                pages2 = sorted(list(set(pages2)))
+        pprint(pages2)
+                    #hier['children'].append({'name': item[0],
+#                                             'size': [item[1]]})
 
 def deduplicate():
     json_check = []
@@ -60,6 +69,7 @@ def deduplicate():
     
     hier['children'] = json_final
 
+
 def amalgamate():
     names = []
     amalgamated = []
@@ -74,14 +84,11 @@ def amalgamate():
         list_of_names = [x['name'] for x in new_hier['children']] 
         if item['name'] not in list_of_names:
             new_hier['children'].append(item)
-            print('adding')
         else:
             [x['children'].append({'name': level2, 'children': [level3]})\
-             if level1 == x['name'] else print(level1 + ' pass')\
+             if level1 == x['name'] else 100000000\
              for x in new_hier['children']]
             pass
-
-    pprint(new_hier)
 
 
 if __name__ == '__main__':
