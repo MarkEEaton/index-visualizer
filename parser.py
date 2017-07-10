@@ -26,11 +26,10 @@ def rectangulate():
             pass
 
 
-def hierarchify():
-    """ create the hierarchy """
+def hierarchify3():
+    """ create the hierarchy for items with 3 levels"""
     for item in index:
         pages3 = []
-        pages2 = []
         if item[2] != None:
             for row3 in index:
                 if item[0] in row3:
@@ -47,13 +46,24 @@ def hierarchify():
                     ['children'].append({'name': page, 'size': 1})
     
         else:
+            """
             for row2 in index:
                 if item[0] in row2:
                     pages2.append(row2[1])
                 pages2 = sorted(list(set(pages2)))
-        pprint(pages2)
-                    #hier['children'].append({'name': item[0],
-#                                             'size': [item[1]]})
+            hier['children'].append({'name': item[0],
+                                     'children': []})
+            print(pages2)
+            for page in pages2:
+                hier['children'][-1]\
+                    ['children'].append({'name': item[1], 
+                                         'size': 1})
+            #pprint(hier)
+            """
+
+def hierarchify2():
+    for item in index:
+        [d['children'].append({'name': item[1], 'size': 1}) for d in hier['children'] if d['name'] in item[0] and item[2] == None]
 
 def deduplicate():
     json_check = []
@@ -93,7 +103,9 @@ def amalgamate():
 
 if __name__ == '__main__':
     rectangulate()
-    hierarchify()
+    hierarchify3()
+    hierarchify2()
+    pprint(hier)
     deduplicate()
     amalgamate()
 
