@@ -42,7 +42,7 @@ def hierarchify():
         if item[2] == None:
             [d['children'].append({'name': item[1], 'size': 1}) for d in hier['children'] if d['name'] == item[0] and item[2] == None]
 
-# all good up to here...
+        # all good up to here...
 
         # add the three-level items
         if item[2] != None:
@@ -69,22 +69,24 @@ def deduplicate():
 
 
 def amalgamate():
-    amalgamated = []
+    past_subitem = {'name': ''}
 
     for item in hier['children']:
-        names = []
         for subitem in item['children']:
-            names.append(subitem['name'])
-        names = list(set(names))
-        print(names)
-        
-        level1 = item['name']
-        level2 = item['children'][0]['name']
+            new_subitem = past_subitem
+            try:
+                if subitem['name'] != past_subitem['name']:
+                    pass
+                else:
+                    new_subitem['children'].append(subitem['children'][0])
+                    print(new_subitem)
+                    past_subitem = subitem
+            except:
+                print('exception')
+            finally:
+                past_subitem = subitem
+                
 
-        # replace code below with a way to sub in a unified subentry
-
-        #for subitem in item['children']:
-        #    if 
 """
         list_of_names = [x['name'] for x in new_hier['children']] 
             if item['name'] not in list_of_names:
@@ -99,7 +101,7 @@ def amalgamate():
 if __name__ == '__main__':
     rectangulate()
     hierarchify()
-    #amalgamate()
+    amalgamate()
     #pprint(hier)
 
 with open('index.json', 'w') as f2:
