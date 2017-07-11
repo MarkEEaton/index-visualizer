@@ -73,30 +73,19 @@ def amalgamate():
 
     for item in hier['children']:
         for subitem in item['children']:
-            new_subitem = past_subitem
             try:
                 if subitem['name'] != past_subitem['name']:
-                    pass
+                    new_subitem = past_subitem
                 else:
                     new_subitem['children'].append(subitem['children'][0])
-                    print(new_subitem)
                     past_subitem = subitem
             except:
                 print('exception')
             finally:
                 past_subitem = subitem
+                print(new_subitem)
                 
 
-"""
-        list_of_names = [x['name'] for x in new_hier['children']] 
-            if item['name'] not in list_of_names:
-                new_hier['children'].append(item)
-            else:
-                [x['children'].append({'name': level2, 'children': [level3]})\
-                 if level1 == x['name'] else 100000000\
-                 for x in new_hier['children']]
-                pass
-"""
 
 if __name__ == '__main__':
     rectangulate()
