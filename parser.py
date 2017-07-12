@@ -79,20 +79,31 @@ def amalgamate():
     ys = yield_subitem()
     while True:
         create_subitem = past_subitem
-        subitem = next(ys)
-        past_subitem = individual_amalgamate(subitem, past_subitem, create_subitem)
+        try:
+            subitem = next(ys)
+        except StopIteration:
+            return
+        past_subitem = individual_amalgamate(subitem, past_subitem, create_subitem, ys)
 
 
-def individual_amalgamate(subitem, past_subitem, create_subitem):
+def individual_amalgamate(subitem, past_subitem, create_subitem, ys):
     try:
         if subitem['name'] != past_subitem['name']:
             pass
         else:
             create_subitem['children'].append(subitem['children'][0])
             past_subitem = subitem
+            try:
+                subitem = next(ys)
+            except StopIteration:
+                return 
             print(create_subitem)
+            try:
+                individual_amalgamate(subitem, past_subitem, create_subitem, ys)
+            except StopIteration:
+                pass
     except Exception as e:
-        print(e)
+        print('exception: ' + e)
     finally:
         past_subitem = subitem
         return past_subitem
