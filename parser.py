@@ -68,23 +68,34 @@ def deduplicate():
     hier['children'] = json_final
 
 
-def amalgamate():
-    past_subitem = {'name': ''}
-
+def yield_subitem():
     for item in hier['children']:
         for subitem in item['children']:
-            try:
-                if subitem['name'] != past_subitem['name']:
-                    new_subitem = past_subitem
-                else:
-                    new_subitem['children'].append(subitem['children'][0])
-                    past_subitem = subitem
-            except:
-                print('exception')
-            finally:
-                past_subitem = subitem
-                print(new_subitem)
-                
+            yield subitem
+
+
+def amalgamate():
+    past_subitem = {'name': 'blah'}
+    ys = yield_subitem()
+    while True:
+        create_subitem = past_subitem
+        subitem = next(ys)
+        past_subitem = individual_amalgamate(subitem, past_subitem, create_subitem)
+
+
+def individual_amalgamate(subitem, past_subitem, create_subitem):
+    try:
+        if subitem['name'] != past_subitem['name']:
+            pass
+        else:
+            create_subitem['children'].append(subitem['children'][0])
+            past_subitem = subitem
+            print(create_subitem)
+    except Exception as e:
+        print(e)
+    finally:
+        past_subitem = subitem
+        return past_subitem
 
 
 if __name__ == '__main__':
