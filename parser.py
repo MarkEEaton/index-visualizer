@@ -41,8 +41,7 @@ def hierarchify():
         # add the two-level items
         if item[2] is None:
             [d['children'].append({'name': item[1], 'size': 1})
-             for d in hier['children'] if d['name'] == item[0] and
-             item[2] is None]
+             for d in hier['children'] if d['name'] == item[0]]
 
         # add the three-level items
         if item[2] is not None:
