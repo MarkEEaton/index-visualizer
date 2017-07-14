@@ -18,7 +18,7 @@ with open('miller.txt', 'r') as f1:
 
 
 def rectangulate():
-    """ make the data rectangular by adding none values """
+    """ make the data rectangular by adding None values """
     for row in index:
         if len(row) < 3:
             row.append(None)
@@ -27,7 +27,7 @@ def rectangulate():
 
 
 def hierarchify():
-    """ create the hierarchy for items with 3 levels"""
+    """ create the hierarchy """
 
     # make the basic structure
     for item in index:
@@ -80,20 +80,20 @@ def yield_subitem():
 def amalgamate():
     """ set up the amalgamation """
     past_subitem = {'name': 'blah'}
-    ys = yield_subitem()
+    ys1 = yield_subitem()
     while True:
         create_subitem = past_subitem
         try:
-            subitem, item = next(ys)
+            subitem, item = next(ys1)
         except StopIteration:
             return
         past_subitem = individual_amalgamate(subitem,
                                              past_subitem,
                                              create_subitem,
-                                             ys)
+                                             ys1)
 
 
-def individual_amalgamate(subitem, past_subitem, create_subitem, ys):
+def individual_amalgamate(subitem, past_subitem, create_subitem, ys1):
     """ amalgamate the individual items. Recurse when needed. """
     try:
         if subitem['name'] != past_subitem['name']:
@@ -102,10 +102,11 @@ def individual_amalgamate(subitem, past_subitem, create_subitem, ys):
             create_subitem['children'].append(subitem['children'][0])
             past_subitem = subitem
             try:
-                subitem, item = next(ys)
+                subitem, item = next(ys1)
             except StopIteration:
                 return
-            individual_amalgamate(subitem, past_subitem, create_subitem, ys)
+            individual_amalgamate(subitem, past_subitem, create_subitem, ys1)
+            subitem = create_subitem[:]
     except Exception as e:
         print('exception: ' + e)
     finally:
@@ -113,10 +114,39 @@ def individual_amalgamate(subitem, past_subitem, create_subitem, ys):
         return past_subitem
 
 
+def final_dedup():
+    """ wrap it up by making a new_hier without any duplicates """
+    past_subitem = {'name': 'blah'}
+    to_delete = []
+    for item in hier['children']:
+        for subitem in item['children']:
+            if past_subitem['name'] == subitem['name']:
+                to_delete.append(subitem)
+            else:
+                pass
+            past_subitem['name'] = subitem['name']
+    for idx1, item in enumerate(hier['children']):
+        for idx2, subitem in enumerate(item['children']):
+            if subitem in to_delete:
+                print('deleting: ' + str(subitem))
+                hier['children'][idx1]['children'][idx2] = {}
+            else:
+                print('passing')
+
+def clean_empty(d):
+    if not isinstance(d, (dict, list)):
+        return d
+    if isinstance(d, list):
+        return [v for v in (clean_empty(v) for v in d) if v]
+    return {k: v for k, v in ((k, clean_empty(v)) for k, v in d.items()) if v}
+
+
 if __name__ == '__main__':
     rectangulate()
     hierarchify()
     amalgamate()
+    final_dedup()
+    hier = clean_empty(hier)
 
 with open('index.json', 'w') as f2:
     json.dump(hier, f2)
