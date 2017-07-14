@@ -1,6 +1,5 @@
 import csv
 import json
-from pprint import pprint
 
 index = []
 hier = {'name': 'index',
@@ -128,10 +127,13 @@ def final_dedup():
     for idx1, item in enumerate(hier['children']):
         for idx2, subitem in enumerate(item['children']):
             if subitem in to_delete:
-                print('deleting: ' + str(subitem))
-                hier['children'][idx1]['children'][idx2] = {}
+                try:
+                    test = hier['children'][idx1]['children'][idx2]['children']
+                    hier['children'][idx1]['children'][idx2] = {}
+                except:
+                    pass
             else:
-                print('passing')
+                pass
 
 def clean_empty(d):
     if not isinstance(d, (dict, list)):
