@@ -115,7 +115,10 @@ def individual_amalgamate(subitem, past_subitem, create_subitem, ys1):
 
 
 def final_dedup():
-    """ wrap it up by making a new_hier without any duplicates """
+    """ 
+    wrap it up by replacing the extraneous subentries with
+    empty dicts
+     """
     past_subitem = {'name': 'blah'}
     to_delete = []
     for item in hier['children']:
@@ -129,7 +132,7 @@ def final_dedup():
         for idx2, subitem in enumerate(item['children']):
             if subitem in to_delete:
                 try:
-                    test1 = hier['children'][idx1]['children'][idx2]['children']
+                    assert hier['children'][idx1]['children'][idx2]['children']
                     hier['children'][idx1]['children'][idx2] = {}
                 except:
                     pass
@@ -137,6 +140,7 @@ def final_dedup():
                 pass
 
 def clean_empty(d):
+    """ recurse through the hierarchy deleting empty dicts """
     if not isinstance(d, (dict, list)):
         return d
     if isinstance(d, list):
