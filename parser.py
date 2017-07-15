@@ -1,5 +1,6 @@
 import csv
 import json
+from random import random
 
 index = []
 hier = {'name': 'index',
@@ -39,14 +40,14 @@ def hierarchify():
 
         # add the two-level items
         if item[2] is None:
-            [d['children'].append({'name': item[1], 'size': 1})
+            [d['children'].append({'name': item[1], 'size': random()})
              for d in hier['children'] if d['name'] == item[0]]
 
         # add the three-level items
         if item[2] is not None:
             [d['children'].append({'name': item[1],
                                    'children': [{'name': item[2],
-                                                 'size': 0}]})
+                                                 'size': random()}]})
              for d in hier['children'] if d['name'] == item[0]]
 
         else:
@@ -128,7 +129,7 @@ def final_dedup():
         for idx2, subitem in enumerate(item['children']):
             if subitem in to_delete:
                 try:
-                    test = hier['children'][idx1]['children'][idx2]['children']
+                    test1 = hier['children'][idx1]['children'][idx2]['children']
                     hier['children'][idx1]['children'][idx2] = {}
                 except:
                     pass
